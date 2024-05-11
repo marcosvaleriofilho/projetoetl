@@ -3,40 +3,27 @@ import sqlite3 from "sqlite3";
 const DBSOURCE = "db.sqlite";
 
 const DDL_SCRIPT = `
-  CREATE TABLE IF NOT EXISTS Users (
+  CREATE TABLE IF NOT EXISTS Clients(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL
+    cpf TEXT UNIQUE NOT NULL
   );
 
   CREATE TABLE IF NOT EXISTS Stocks (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    companyName TEXT NOT NULL,
+    company TEXT NOT NULL,
     symbol TEXT UNIQUE NOT NULL,
-    currentPrice REAL NOT NULL,
-    description TEXT
+    current_price REAL NOT NULL,
   );
 
-  CREATE TABLE IF NOT EXISTS Transactions (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    userId INTEGER NOT NULL,
-    stockId INTEGER NOT NULL,
-    type TEXT NOT NULL,
+  CREATE TABLE IF NOT EXISTS Orders (
+    code INTEGER PRIMARY KEY AUTOINCREMENT,
+    client_id INTEGER NOT NULL,
+    stock_id INTEGER NOT NULL,
     quantity INTEGER NOT NULL,
-    pricePerStock REAL NOT NULL,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (userId) REFERENCES Users(id),
-    FOREIGN KEY (stockId) REFERENCES Stocks(id)
-  );
-
-  CREATE TABLE IF NOT EXISTS Wallet (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    userId INTEGER NOT NULL,
-    stockId INTEGER NOT NULL,
-    quantity INTEGER NOT NULL,
-    FOREIGN KEY (userId) REFERENCES Users(id),
-    FOREIGN KEY (stockId) REFERENCES Stocks(id)
+    FOREIGN KEY (client_id) REFERENCES Clients(id),
+    FOREIGN KEY (stock_id) REFERENCES Stocks(id)
   );
 `;
 

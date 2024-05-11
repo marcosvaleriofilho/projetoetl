@@ -1,16 +1,28 @@
-import http from "http";
+import express from "express";
+import cors from "cors";
+import clientRoutes from "./routers/clientRoutes";
+import stockRoutes from "./routers/stockRoutes";
+import orderRoutes from "./routers/orderRoutes";
 
-const server = http.createServer((req, res) => {
-    res.writeHead(200,
-        { "Content-Type": "application/json" });
-    res.end(
-        JSON.stringify({
-            data: "Stro..."
-        })
-    );
+const app = express();
+
+app.use(cors());
+app.use(express.json());
+app.use("/api", clientRoutes);
+app.use("/api", stockRoutes);
+app.use("/api", orderRoutes);
+
+app.get("/", (req, res) => {
+  res.send("API funcionando!");
 });
 
-server.listen(3000,()=>{
-    console.log("Server rodando na porta 3000")
-})
+app.use((req, res) => {
+  res.status(404);
+});
 
+const PORT = process.env.PORT || 3000;
+const HOSTNAME = process.env.HOSTNAME || "http://localhost";
+
+app.listen(PORT, () => {
+  console.log(`Servidor funcionando: ${HOSTNAME}:${PORT}`);
+});
